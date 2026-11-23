@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#05070f">
+<link rel="manifest" href="/manifest.json">
+<title>MK AI Studio: create photos, videos, websites, games and apps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://js.puter.com/v2/"></script>
+<style>
+@property --a{syntax:"<angle>";inherits:false;initial-value:0deg}
+:root{--bg:#05070f;--panel:#0c1224;--panel2:#121b36;--line:rgba(255,255,255,.1);--text:#eef2ff;--muted:#9aa7c9;--gold:#f5c542;--gold2:#ffe08a;--cyan:#5ee7ff;--violet:#8b5cf6;--bad:#ff7b8a;--foil:linear-gradient(135deg,#ffe08a,#f5c542 50%,#d9962b)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--text);font:15px/1.6 Sora,system-ui,sans-serif;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(900px 520px at 88% -8%,rgba(139,92,246,.22),transparent 60%),radial-gradient(800px 520px at -8% 8%,rgba(58,160,255,.18),transparent 60%),radial-gradient(700px 420px at 50% 115%,rgba(245,197,66,.12),transparent 60%)}
+[hidden]{display:none!important}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.badge{width:40px;height:40px;flex:none;border-radius:12px;display:grid;place-items:center;font:800 15px Cinzel,serif;color:#1a1200;background:var(--foil);box-shadow:0 6px 22px rgba(245,197,66,.35)}
+/* gate */
+#gate{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:20px;background:var(--bg)}
+.card{width:min(400px,100%);padding:30px 26px;border-radius:28px;background:linear-gradient(160deg,rgba(18,26,52,.95),rgba(8,12,26,.98));border:1px solid rgba(245,197,66,.4);box-shadow:0 30px 80px #000a,0 0 60px rgba(245,197,66,.14)}
+.card h1{font:800 24px Cinzel,serif;margin:16px 0 4px;color:var(--gold2)}
+.card p{margin:0 0 18px;color:var(--muted);font-size:14px}
+.card .in{height:52px;margin-bottom:12px}
+.card label{display:flex;gap:8px;align-items:center;margin:12px 0 0;color:var(--muted);font-size:13px}
+#ge{min-height:20px;margin-top:8px;color:var(--bad);font-size:13px}
+.shake{animation:shake .4s}@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+/* shell */
+#app{display:block}
+nav{position:sticky;top:0;z-index:20;display:flex;gap:6px;align-items:center;overflow-x:auto;scrollbar-width:none;padding:calc(10px + env(safe-area-inset-top)) 12px 10px;background:rgba(5,7,15,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+nav::-webkit-scrollbar{display:none}
+.brand{display:flex;gap:10px;align-items:center;flex:none;margin-right:8px;font:800 16px Cinzel,serif;color:var(--gold2)}
+nav button{flex:none;display:flex;gap:8px;align-items:center;padding:9px 14px;border-radius:12px;border:1px solid transparent;background:none;color:var(--muted);font-weight:600;cursor:pointer;white-space:nowrap}
+nav button:hover{color:#fff}
+nav button.on{color:#fff;border-color:rgba(245,197,66,.55);background:linear-gradient(135deg,rgba(245,197,66,.16),rgba(58,160,255,.1))}
+main{max-width:1080px;margin:0 auto;padding:22px 14px calc(60px + env(safe-area-inset-bottom))}
+@media(min-width:960px){
+#app{display:grid;grid-template-columns:240px 1fr}
+nav{flex-direction:column;align-items:stretch;height:100vh;overflow:visible;padding:24px 14px;border:0;border-right:1px solid var(--line)}
+.brand{margin:0 0 20px}nav button{padding:12px 14px}nav .out{margin-top:auto}
+main{padding:36px 38px 70px;width:100%}}
+/* home */
+h1.hero{font:800 clamp(32px,5.6vw,58px)/1.08 Cinzel,serif;margin:26px 0 12px;max-width:14ch;background:var(--foil);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--muted);font-size:17px;max-width:46ch;margin:0 0 26px}
+.bar{display:flex;gap:8px;padding:8px;border-radius:20px;border:1.5px solid transparent;background:linear-gradient(var(--panel),var(--panel)) padding-box,conic-gradient(from var(--a),var(--gold),var(--cyan),var(--violet),var(--gold)) border-box;animation:spin 7s linear infinite}
+@keyframes spin{to{--a:360deg}}
+.bar input{flex:1;min-width:0;border:0;background:none;outline:0;padding:0 12px;font-size:16px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:30px}
+.tile{display:flex;flex-direction:column;gap:6px;min-height:132px;padding:18px;text-align:left;border-radius:24px;border:1px solid var(--line);background:linear-gradient(160deg,var(--panel2),var(--panel));cursor:pointer;transition:border-color .2s}
+.tile:hover{border-color:rgba(245,197,66,.6)}
+.tile i{font-style:normal;font-size:28px}.tile b{font-size:16px}.tile span{color:var(--muted);font-size:13px}
+@media(min-width:700px){.grid{grid-template-columns:repeat(6,1fr)}.tile{grid-column:span 2}.tile.w{grid-column:span 3}.tile.f{grid-column:span 6;min-height:0}}
+/* tools */
+h2{font:700 26px/1.2 Cinzel,serif;margin:6px 0 6px;color:var(--gold2)}
+.lead{color:var(--muted);margin:0 0 18px;max-width:62ch}
+.in,textarea{width:100%;padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:rgba(3,6,16,.75);outline:0;resize:vertical}
+.in:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(245,197,66,.16)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.chip{padding:7px 14px;border-radius:99px;border:1px solid var(--line);background:#ffffff08;color:var(--muted);font-size:13px;cursor:pointer}
+.chip:hover{color:#fff}.chip.on{color:#fff;border-color:rgba(245,197,66,.75);background:rgba(245,197,66,.15)}
+.btn{height:48px;padding:0 22px;border:0;border-radius:13px;cursor:pointer;font-weight:700;color:#1a1200;background:var(--foil);box-shadow:0 8px 26px rgba(245,197,66,.25)}
+.btn:disabled{opacity:.55;cursor:wait}
+.ghost{height:44px;padding:0 16px;border-radius:12px;border:1px solid var(--line);background:#ffffff08;cursor:pointer}
+.ghost:hover{border-color:rgba(245,197,66,.6)}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.row .in{flex:1;min-width:200px;padding:0 16px;height:44px}
+.stage{display:grid;place-items:center;min-height:240px;margin-top:16px;padding:12px;border-radius:24px;border:1px solid var(--line);background:var(--panel);overflow:hidden}
+.stage img,.stage video{max-width:100%;max-height:72vh;border-radius:14px}
+.stage iframe{width:100%;height:68vh;min-height:420px;border:0;border-radius:14px;background:#fff}
+.msg{color:var(--muted);text-align:center;padding:28px;max-width:46ch}
+.orb{width:34px;height:34px;margin:0 auto 12px;border-radius:50%;border:3px solid #ffffff22;border-top-color:var(--gold);animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.log{display:flex;flex-direction:column;gap:12px;min-height:240px;max-height:56vh;overflow:auto;margin-top:6px}
+.m{max-width:92%;padding:12px 15px;border-radius:18px 18px 18px 5px;background:var(--panel2);white-space:pre-wrap;overflow-wrap:anywhere}
+.m.u{align-self:flex-end;border-radius:18px 18px 5px 18px;background:rgba(245,197,66,.14);border:1px solid rgba(245,197,66,.3)}
+.m pre{margin:8px 0 0;padding:10px;border-radius:10px;background:#030510;overflow:auto;white-space:pre}
+.tile.f{order:-1;grid-column:1/-1;min-height:0}
+.tb{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:12px}
+.tb label{display:flex;flex-direction:column;gap:4px;flex:1;min-width:160px;color:var(--muted);font-size:12px}
+select{height:44px;padding:0 12px;border-radius:12px;border:1px solid var(--line);background:#050918;color:var(--text);font:inherit;outline:0}
+select:focus{border-color:var(--gold)}
+.comp{display:flex;gap:8px;align-items:flex-end;margin-top:12px;padding:8px;border-radius:20px;border:1px solid var(--line);background:var(--panel)}
+.comp textarea{flex:1;min-height:44px;max-height:180px;border:0;background:none;resize:none;padding:11px 8px}
+.comp textarea:focus{box-shadow:none}
+.cpy{display:block;margin-top:8px;padding:4px 10px;border:1px solid var(--line);border-radius:8px;background:none;color:var(--muted);font-size:12px;cursor:pointer}
+.log{max-height:60vh}
+.acct{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px;padding:12px 14px;border-radius:16px;border:1px solid rgba(245,197,66,.45);background:rgba(245,197,66,.08);color:var(--gold2);font-size:14px}.acct span{flex:1;min-width:200px}
+#toast{position:fixed;left:50%;bottom:24px;z-index:60;padding:11px 18px;border-radius:12px;background:#1b2547;border:1px solid var(--line);opacity:0;transform:translate(-50%,16px);transition:.25s;pointer-events:none}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+@media(prefers-reduced-motion:reduce){.bar{animation:none}}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#00ffff"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"></head>
+<body>
+
+<div id="gate"><form class="card" id="gf" autocomplete="off">
+<div class="badge">MK</div><h1>MK AI Studio</h1><p>Enter your password to open the studio.</p>
+<input class="in" id="pw" type="password" placeholder="Password" aria-label="Password" autocomplete="current-password">
+<button class="btn" style="width:100%;height:52px">Open studio</button>
+<label><input type="checkbox" id="rem" checked> Keep me signed in on this device</label><div id="ge" role="alert"></div>
+</form></div>
+
+<div id="app" hidden>
+<nav>
+<div class="brand"><span class="badge">MK</span>MK AI Studio</div>
+<button class="on" data-go="home">🏠 Home</button>
+<button data-go="chat">🧠 Assistant</button>
+<button data-go="photo">🖼 Photos</button>
+<button data-go="video">🎬 Videos</button>
+<button data-go="web">🌐 Websites</button>
+<button data-go="game">🎮 Games</button>
+<button data-go="app">📱 Apps</button>
+<button class="out" id="out">Sign out</button>
+</nav>
+<main>
+<div class="acct" id="acct" hidden><span id="at"></span><button class="ghost" id="ab">Sign in to Puter</button></div>
+
+<section class="page" id="p-home">
+<h1 class="hero">Describe it. Get it made.</h1>
+<p class="sub">Photos, videos, websites, games and apps from a single sentence.</p>
+<div class="bar"><input id="hi" aria-label="What do you want to make?"><button class="btn" id="hgo">Create</button></div>
+<div class="chips" id="hch"></div>
+<div class="grid">
+<button class="tile w" data-go="video"><i>🎬</i><b>Videos</b><span>Turn a sentence into a short cinematic clip.</span></button>
+<button class="tile w" data-go="photo"><i>🖼</i><b>Photos</b><span>Realistic photos, art, logos and 3D renders in seconds.</span></button>
+<button class="tile" data-go="web"><i>🌐</i><b>Websites</b><span>Full responsive sites you can preview and download.</span></button>
+<button class="tile" data-go="game"><i>🎮</i><b>Games</b><span>Playable games with keyboard and touch controls.</span></button>
+<button class="tile" data-go="app"><i>📱</i><b>Apps</b><span>Working mobile-first apps with real features.</span></button>
+<button class="tile f" data-go="chat"><i>🧠</i><b>AI Assistant</b><span>Ask anything with the newest Claude models and more. Write, code, research, learn, translate and analyse files.</span></button>
+</div>
+</section>
+
+<section class="page" id="p-photo" hidden>
+<h2>Photo generator</h2><p class="lead">Describe the picture, choose a look, and download the result.</p>
+<textarea id="pp" rows="3" placeholder="A fox in a rain jacket reading a map in a forest"></textarea>
+<div class="chips" id="pch"></div>
+<div class="row"><button class="btn" id="pgo">Create photo</button><button class="ghost" id="pdl" hidden>Download</button></div>
+<div class="stage" id="ps"><div class="msg">Your photo appears here.</div></div>
+</section>
+
+<section class="page" id="p-video" hidden>
+<h2>Video generator</h2><p class="lead">Describe the scene and camera movement. Clips usually take one to three minutes.</p>
+<textarea id="vp" rows="3" placeholder="A slow drone shot over a misty mountain lake at sunrise"></textarea>
+<div class="row"><button class="btn" id="vgo">Create video</button><button class="ghost" id="vdl" hidden>Download</button></div>
+<div class="stage" id="vs"><div class="msg">Your video appears here. A Puter sign-in window may open the first time.</div></div>
+</section>
+
+<section class="page" id="p-build" hidden>
+<h2 id="bt"></h2><p class="lead" id="bd"></p>
+<div class="chips" id="bm"></div>
+<textarea id="bp" rows="3"></textarea>
+<div class="chips" id="bx"></div>
+<button class="btn" id="bgo">Build it</button>
+<div class="stage" id="bs"></div>
+<div class="row" id="btl" hidden>
+<input class="in" id="bi" placeholder="Ask for a change, for example: make the buttons bigger" aria-label="Change request">
+<button class="btn" id="bup">Apply change</button>
+<button class="ghost" id="bdl">Download</button><button class="ghost" id="bcp">Copy code</button><button class="ghost" id="bfs">Full screen</button>
+</div>
+</section>
+
+<section class="page" id="p-chat" hidden>
+<h2>AI Assistant</h2><p class="lead">One assistant for writing, coding, research, learning and planning. Pick a model and a skill, then ask.</p>
+<div class="tb">
+<label>Model<select id="cm"></select></label>
+<label>Skill<select id="cs"></select></label>
+<button class="ghost" id="cn">New chat</button><button class="ghost" id="cx">Export</button>
+</div>
+<div class="log" id="cl"></div>
+<div class="row" id="cf"></div>
+<div class="comp"><button class="ghost" id="ca" aria-label="Attach text files" title="Attach text files">＋</button><input type="file" id="cfi" multiple hidden accept=".txt,.md,.csv,.json,.html,.css,.js,.py,.xml,.log"><textarea id="ci" rows="1" placeholder="Message MK AI" aria-label="Message"></textarea><button class="btn" id="csend">Send</button></div>
+</section>
+
+</main>
+</div>
+<div id="toast" role="status"></div>
+
+<script>
+const $=id=>document.getElementById(id),SALT="mk-ai-studio-v5::",PASS_HASH="60c700d672fdbb71f40fa0e5a082d1fffefe74cb190d561b1485f70f37b87dd3",K="mk_auth";
+const toast=m=>{const t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove("show"),2800)};
+const esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const md=s=>esc(s).replace(/```\w*\n?([\s\S]*?)```/g,"<pre>$1</pre>").replace(/\*\*(.+?)\*\*/g,"<b>$1</b>");
+
+/* sign in (same password as before) */
+const authed=()=>{try{return localStorage.getItem(K)==="1"||sessionStorage.getItem(K)==="1"}catch(e){return false}};
+const unlock=()=>{$("gate").hidden=true;$("app").hidden=false};
+const sha=async s=>[...new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s)))].map(x=>x.toString(16).padStart(2,"0")).join("");
+$("gf").onsubmit=async e=>{e.preventDefault();let ok;
+ try{ok=await sha(SALT+$("pw").value)===PASS_HASH}catch(x){$("ge").textContent="Open the site over HTTPS to sign in.";return}
+ if(ok){try{($("rem").checked?localStorage:sessionStorage).setItem(K,"1")}catch(x){}unlock()}
+ else{$("ge").textContent="Wrong password. Check it and try again.";$("gf").classList.remove("shake");void $("gf").offsetWidth;$("gf").classList.add("shake")}};
+$("out").onclick=()=>{try{localStorage.removeItem(K);sessionStorage.removeItem(K)}catch(e){}location.reload()};
+if(authed())unlock();else setTimeout(()=>$("pw").focus(),200);
+
+/* AI helpers (Puter.js: no API keys, users cover their own usage) */
+const insecure=!/^https?:$/.test(location.protocol);
+const need=()=>{if(insecure){acct();toast("Open the site from its https address to use the AI tools.");return false}
+ if(!navigator.onLine){acct();toast("You are offline. Turn off airplane mode and reconnect.");return false}
+ if(!window.puter){toast("Puter AI did not load. Check your connection and reload.");return false}return true};
+const txt=r=>{if(typeof r==="string")return r;const c=r?.message?.content??r?.text??"";return Array.isArray(c)?c.map(p=>p.text||"").join(""):String(c)};
+const ask=async m=>txt(await puter.ai.chat(m));
+const errHtml=e=>{const m=String(e?.error?.message||e?.message||(typeof e==="string"?e:"")||"");
+ const why=insecure?"This page is open from a file on your device. Open the site from its https web address instead.":!navigator.onLine?"You are offline. Turn off airplane mode and reconnect.":/auth|cancel|sign/i.test(m)?"Puter sign-in was canceled or blocked. Tap Sign in to Puter at the top, allow the pop-up window and finish signing in.":m||"The AI service did not respond.";
+ return '<div class="msg"><b>That did not work.</b><br>'+esc(why)+'</div>'};
+function busy(el,label){const t0=Date.now();el.innerHTML='<div class="msg"><div class="orb"></div>'+label+' <b id="tm">0s</b></div>';const id=setInterval(()=>{const s=$("tm");if(s)s.textContent=Math.round((Date.now()-t0)/1000)+"s"},500);return()=>clearInterval(id)}
+async function saveUrl(u,n){try{const b=await(await fetch(u)).blob(),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=n;a.click()}catch(e){window.open(u,"_blank")}}
+const chips=(el,items,cur,fn)=>{el.innerHTML="";items.forEach(k=>{const b=document.createElement("button");b.type="button";b.className="chip"+(k===cur?" on":"");b.textContent=k;b.onclick=()=>{fn(k);[...el.children].forEach(c=>c.classList.toggle("on",c===b))};el.append(b)})};
+
+/* navigation */
+const BUILD=["web","game","app"];
+function go(n){const b=BUILD.includes(n);if(b)setMode(n);
+ document.querySelectorAll(".page").forEach(p=>p.hidden=p.id!=="p-"+(b?"build":n));
+ document.querySelectorAll("nav [data-go]").forEach(x=>x.classList.toggle("on",x.dataset.go===n));scrollTo(0,0)}
+document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
+
+/* home launcher */
+const TG={photo:["Photo","A neon-lit street in Tokyo after rain","pp","pgo"],video:["Video","A drone flight over a misty lake at sunrise","vp","vgo"],web:["Website","A landing page for a local coffee roastery","bp","bgo"],game:["Game","A neon space shooter with power-ups","bp","bgo"],app:["App","A habit tracker with streaks and reminders","bp","bgo"],chat:["Ask","Write a launch email for my new product","ci","csend"]};
+let tg="web";const pick=k=>{tg=k;$("hi").placeholder=TG[k][1]};
+chips($("hch"),Object.keys(TG).map(k=>TG[k][0]),"Website",l=>pick(Object.keys(TG).find(k=>TG[k][0]===l)));pick("web");
+const launch=()=>{const v=$("hi").value.trim()||TG[tg][1];go(tg);$(TG[tg][2]).value=v;$(TG[tg][3]).click()};
+$("hgo").onclick=launch;$("hi").onkeydown=e=>{if(e.key==="Enter")launch()};
+
+/* photos */
+const STY={Cinematic:"cinematic lighting, ultra detailed, 35mm film look",Realistic:"photorealistic, sharp focus, natural light",Anime:"anime illustration, vibrant colors, clean line art","3D render":"3D render, soft studio lighting",Logo:"minimal vector logo, flat design, white background",Painting:"oil painting, rich brush strokes, museum quality"};
+let sty="Cinematic",pimg="";chips($("pch"),Object.keys(STY),sty,k=>sty=k);
+$("pgo").onclick=async()=>{const p=$("pp").value.trim();if(!p)return toast("Describe the photo first");if(!need())return;
+ $("pgo").disabled=true;$("pdl").hidden=true;const stop=busy($("ps"),"Creating your photo");
+ try{const i=await puter.ai.txt2img(p+", "+STY[sty]);stop();$("ps").replaceChildren(i);pimg=i.src;$("pdl").hidden=false}catch(e){stop();$("ps").innerHTML=errHtml(e)}
+ $("pgo").disabled=false};
+$("pdl").onclick=()=>saveUrl(pimg,"mk-photo.png");
+
+/* videos */
+let vurl="";
+$("vgo").onclick=async()=>{const p=$("vp").value.trim();if(p.split(/\s+/).length<3)return toast("Describe the scene in a few words, for example: a drone shot over a misty lake at sunrise");if(!need())return;
+ $("vgo").disabled=true;$("vdl").hidden=true;const stop=busy($("vs"),"Rendering your video");
+ try{const v=await puter.ai.txt2vid(p);stop();v.controls=true;v.loop=true;v.playsInline=true;$("vs").replaceChildren(v);vurl=v.currentSrc||v.src;$("vdl").hidden=false}catch(e){stop();$("vs").innerHTML=errHtml(e)}
+ $("vgo").disabled=false};
+$("vdl").onclick=()=>saveUrl(vurl,"mk-video.mp4");
+
+/* websites, games and apps */
+const RULES=" Return ONE complete, self-contained HTML file with inline CSS and JavaScript. No external libraries or image URLs; use emoji, CSS and inline SVG for visuals. Reply with only the code in a single ```html block.";
+const MODES={
+web:{n:"website",t:"Website builder",d:"Describe a website and get a finished, mobile-ready page to preview, tweak and download.",ex:["Landing page for a coffee roastery","Portfolio for a wedding photographer","Restaurant site with menu and booking form","Pricing page for a fitness app"],sys:"You are a senior web designer. Build a distinctive, modern, fully responsive website with real written copy (no lorem ipsum), clear sections, focus states, strong contrast, working navigation and validated forms."},
+game:{n:"game",t:"Game maker",d:"Describe a game and play it right here. Every game has keyboard and touch controls.",ex:["Neon space shooter with power-ups","Endless runner with a cat","Memory card match with levels","Snake with obstacles and high score"],sys:"You are an expert game developer. Build a polished, fun, playable HTML5 game with a start screen showing instructions, score, game over and restart, rising difficulty, and keyboard plus touch controls."},
+app:{n:"app",t:"App builder",d:"Describe an app and get a working, mobile-first version with real features.",ex:["Habit tracker with streaks","Expense splitter for friends","Pomodoro timer with task list","Flashcard study app"],sys:"You are a product engineer. Build a fully working mobile-first web app with real state, add/edit/delete, search or filters where useful, and a clean UI. Keep data in memory and try localStorage inside try/catch."}};
+let mode="web",cur="";const S={web:{},game:{},app:{}};
+function setMode(m){if(m===mode&&$("bt").textContent)return;S[mode]={p:$("bp").value,c:cur};mode=m;const M=MODES[m],s=S[m];
+ $("bt").textContent=M.t;$("bd").textContent=M.d;$("bp").value=s.p||"";$("bp").placeholder=M.ex[0];cur=s.c||"";
+ chips($("bm"),Object.keys(MODES).map(k=>MODES[k].n[0].toUpperCase()+MODES[k].n.slice(1)+"s"),M.n[0].toUpperCase()+M.n.slice(1)+"s",l=>go(Object.keys(MODES).find(k=>l.toLowerCase().startsWith(MODES[k].n))));
+ chips($("bx"),M.ex,"",x=>{$("bp").value=x});cur?show():($("bs").innerHTML='<div class="msg">Your '+M.n+' appears here.</div>',$("btl").hidden=true)}
+const code=s=>{const m=s.match(/```(?:html)?\s*([\s\S]*?)```/i);let c=m?m[1]:s.replace(/```(?:html)?/gi,"");const i=c.search(/<!doctype|<html/i);return(i>0?c.slice(i):c).trim()};
+function show(){const f=document.createElement("iframe");f.title="Preview";f.setAttribute("sandbox","allow-scripts allow-modals allow-forms allow-pointer-lock");f.srcdoc=cur;$("bs").replaceChildren(f);$("btl").hidden=false}
+async function build(change){const p=$("bp").value.trim();if(!p)return toast("Describe what to build first");if(!need())return;
+ const M=MODES[mode],m=[{role:"system",content:M.sys+RULES}];
+ if(change&&cur)m.push({role:"user",content:"Original request: "+p},{role:"assistant",content:"```html\n"+cur+"\n```"},{role:"user",content:"Apply this change and return the full updated file: "+change});else m.push({role:"user",content:p});
+ $("bgo").disabled=$("bup").disabled=true;const stop=busy($("bs"),"Building your "+M.n);
+ try{cur=code(await ask(m));stop();show();$("bi").value=""}catch(e){stop();$("bs").innerHTML=errHtml(e)}
+ $("bgo").disabled=$("bup").disabled=false}
+$("bgo").onclick=()=>{cur="";build()};
+$("bup").onclick=()=>{const c=$("bi").value.trim();c?build(c):toast("Type the change you want first")};
+$("bdl").onclick=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([cur],{type:"text/html"}));a.download="mk-"+MODES[mode].n+".html";a.click()};
+$("bcp").onclick=()=>navigator.clipboard.writeText(cur).then(()=>toast("Code copied"),()=>toast("Copy failed. Download the file instead."));
+$("bfs").onclick=()=>{const f=$("bs").querySelector("iframe");f&&f.requestFullscreen&&f.requestFullscreen()};
+
+/* AI assistant */
+const SK={General:"",Writer:"Act as an expert writer and editor. Produce polished, ready-to-use text.",Coder:"Act as a senior software engineer. Give correct, runnable code in fenced blocks with a short explanation.",Researcher:"Act as a research analyst. Give plans with key questions, sources to check and structure. Say clearly what you cannot verify.",Tutor:"Act as a patient tutor. Teach step by step with simple examples, then offer a short quiz.",Translator:"Act as a professional translator. Translate accurately and keep the tone. If no target language is given, translate to English.",Marketer:"Act as a marketing strategist. Give specific campaign ideas, copy and next steps.",Analyst:"Act as a business and data analyst. Give rigorous insights, risks and next steps."};
+const BEST=["claude-opus-5-5","claude-sonnet-5-5","claude-haiku-5-5"],LBL={"claude-opus-5-5":"Claude Opus 5.5 (most capable)","claude-sonnet-5-5":"Claude Sonnet 5.5 (best all-round)","claude-haiku-5-5":"Claude Haiku 5.5 (fastest)"};
+const lsGet=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},lsSet=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+let hist=lsGet("mk_chat",[]),files=[],ctl=null;
+$("cs").innerHTML=Object.keys(SK).map(k=>"<option>"+k+"</option>").join("");$("cs").value=lsGet("mk_skill","General");$("cs").onchange=()=>lsSet("mk_skill",$("cs").value);
+async function loadModels(){let list=[];try{list=await puter.ai.listModels()}catch(e){}
+ const ids=new Set(list.map(m=>m.id)),g={},sel=$("cm"),add=(par,id,l)=>{const o=document.createElement("option");o.value=id;o.textContent=l;par.append(o)};
+ list.forEach(m=>{if(BEST.includes(m.id)||/embed|tts|image|audio|moderation|realtime|whisper|transcribe/i.test(m.id))return;(g[m.provider]=g[m.provider]||[]).push(m)});
+ sel.innerHTML="";const have=BEST.filter(id=>!list.length||ids.has(id));
+ if(have.length){const og=document.createElement("optgroup");og.label="Best models";have.forEach(id=>add(og,id,LBL[id]));sel.append(og)}
+ Object.keys(g).sort().forEach(p=>{const og=document.createElement("optgroup");og.label=p;g[p].sort((a,b)=>(b.name||b.id).localeCompare(a.name||a.id)).slice(0,15).forEach(m=>add(og,m.id,m.name||m.id));sel.append(og)});
+ const sv=lsGet("mk_model","");sel.value=[...sel.options].some(o=>o.value===sv)?sv:(have[1]||have[0]||(sel.options[0]&&sel.options[0].value)||"");
+ sel.onchange=()=>lsSet("mk_model",sel.value)}
+const bub=(t,u)=>{const d=document.createElement("div");d.className="m"+(u?" u":"");d.innerHTML=md(t);$("cl").append(d);$("cl").scrollTop=1e9;return d};
+function done(d,t){d.innerHTML=md(t);const b=document.createElement("button");b.className="cpy";b.textContent="Copy";b.onclick=()=>navigator.clipboard.writeText(t).then(()=>toast("Copied"),()=>toast("Copy failed"));d.append(b)}
+function render(){const l=$("cl");l.innerHTML="";if(!hist.length){l.innerHTML='<div class="msg">Ask anything. Choose a skill to focus the answers, attach text files, and switch models whenever you like.</div>';return}
+ hist.forEach(m=>{const u=m.role==="user",d=bub(u?(m.show||m.content):m.content,u);if(!u)done(d,m.content)})}
+const fl=()=>{$("cf").innerHTML="";files.forEach((f,i)=>{const b=document.createElement("button");b.className="chip on";b.textContent="📎 "+f.n+"  ✕";b.onclick=()=>{files.splice(i,1);fl()};$("cf").append(b)})};
+$("ca").onclick=()=>$("cfi").click();
+$("cfi").onchange=async e=>{for(const f of e.target.files){if(f.size>2e6){toast(f.name+" is over 2 MB");continue}files.push({n:f.name,t:(await f.text()).slice(0,60000)})}e.target.value="";fl()};
+async function send(){if(ctl){ctl.abort();return}
+ const v=$("ci").value.trim();if((!v&&!files.length)||!need())return;
+ const full=v+files.map(f=>"\n\n[Attached file: "+f.n+"]\n```\n"+f.t+"\n```").join(""),show=v+files.map(f=>"\n📎 "+f.n).join("");
+ files=[];fl();$("ci").value="";$("ci").style.height="";
+ hist.push({role:"user",content:full,show});if(hist.length===1)$("cl").innerHTML="";bub(show,1);
+ const w=bub("Thinking...");ctl=new AbortController();$("csend").textContent="Stop";let out="";
+ try{const sys="You are MK AI, a universal assistant. Be accurate, clear and concise, and say so when you are unsure instead of guessing. "+SK[$("cs").value]+" Today is "+new Date().toDateString()+".";
+  const r=await puter.ai.chat([{role:"system",content:sys},...hist.slice(-30).map(m=>({role:m.role,content:m.content}))],{model:$("cm").value,stream:true,signal:ctl.signal});
+  if(r&&r[Symbol.asyncIterator]){for await(const p of r){out+=(p&&p.text)||"";w.innerHTML=md(out);$("cl").scrollTop=1e9}}else out=txt(r);
+  if(!out.trim())throw new Error("The model sent an empty answer. Try another model.");
+  hist.push({role:"assistant",content:out});done(w,out)}
+ catch(e){const ab=ctl.signal.aborted;if(ab&&out){hist.push({role:"assistant",content:out});done(w,out)}else{hist.pop();ab?w.remove():w.innerHTML=errHtml(e);$("ci").value=v}}
+ ctl=null;$("csend").textContent="Send";lsSet("mk_chat",hist.slice(-40))}
+$("csend").onclick=send;
+$("ci").onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send()}};
+$("ci").oninput=e=>{e.target.style.height="auto";e.target.style.height=Math.min(e.target.scrollHeight,180)+"px"};
+$("cn").onclick=()=>{if(ctl)ctl.abort();hist=[];files=[];fl();lsSet("mk_chat",[]);render()};
+$("cx").onclick=()=>{if(!hist.length)return toast("Nothing to export yet");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([hist.map(m=>"**"+(m.role==="user"?"You":"MK AI")+"**\n\n"+(m.show||m.content)).join("\n\n---\n\n")],{type:"text/markdown"}));a.download="mk-chat.md";a.click()};
+function acct(){const a=$("acct"),t=$("at"),b=$("ab");let on=false;
+ if(insecure){a.hidden=false;t.textContent="This page is open from a file on your device. The AI tools only work when the site is opened from its https web address.";b.hidden=true;return}
+ if(!navigator.onLine){a.hidden=false;t.textContent="You are offline. Turn off airplane mode and reconnect to use the AI tools.";b.hidden=true;return}
+ try{on=!!(window.puter&&puter.auth.isSignedIn())}catch(e){}
+ a.hidden=on;t.textContent="Sign in to Puter to use the AI tools. Allow the pop-up window and finish signing in.";b.hidden=false}
+$("ab").onclick=async()=>{if(!window.puter)return toast("Puter AI did not load. Reload the page.");try{await puter.auth.signIn();toast("Signed in to Puter")}catch(e){toast("Sign-in was canceled. Allow pop-ups and try again.")}acct()};
+addEventListener("online",acct);addEventListener("offline",acct);setInterval(acct,4000);acct();
+render();loadModels();
+setMode("web");
+</script>
+<script>if("serviceWorker" in navigator)addEventListener("load",function(){navigator.serviceWorker.register("sw.js")})</script></body>
+</html>
